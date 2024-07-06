@@ -146,7 +146,7 @@ App.prototype.doBook = function (url, opts) {
 };
 
 App.prototype.loadSettingsFromStorage = function () {
-    ["theme", "font", "font-size", "line-spacing", "margin", "progress"].forEach(container => this.restoreChipActive(container));
+    ["theme", "font", "font-size", "line-spacing", "margin", "progress", "reading-mode"].forEach(container => this.restoreChipActive(container));
 };
 
 App.prototype.restoreChipActive = function (container) {
@@ -429,7 +429,8 @@ App.prototype.applyTheme = function () {
         fs: this.getChipActive("font-size"),
         lh: this.getChipActive("line-spacing"),
         ta: "justify",
-        m: this.getChipActive("margin")
+        m: this.getChipActive("margin"),
+        rm: this.getChipActive("reading-mode")
     };
 
     let rules = {
@@ -469,7 +470,31 @@ App.prototype.applyTheme = function () {
         this.ael.style.background = theme.bg;
         this.ael.style.fontFamily = theme.ff;
         this.ael.style.color = theme.fg;
-        if (this.state.rendition) this.state.rendition.getContents().forEach(c => c.addStylesheetRules(rules));
+        if (this.state.rendition) {
+            let flow = this.state.rendition.settings.flow;
+            let spread = this.state.rendition.settings.spread;
+            switch (theme.rm) {
+                case "single":
+                    flow = "paginated";
+                    spread = "none";
+                    break;
+                case "auto":
+                    flow = "paginated";
+                    spread = "auto";
+                    break;
+                // TODO: 添加滑动翻页
+                // case "scroll":
+                //     flow = "scrolled-doc";
+                //     spread = "none";
+                //     break;
+                default:
+                    break;
+            }
+            if (flow != this.state.rendition.settings.flow) this.state.rendition.flow(flow);
+            if (spread != this.state.rendition.settings.spread) this.state.rendition.spread(spread);
+            // 更新样式
+            this.state.rendition.getContents().forEach(c => c.addStylesheetRules(rules));
+        }
     } catch (err) {
         console.error("error applying theme", err);
     }
