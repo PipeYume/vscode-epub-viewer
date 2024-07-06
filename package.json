@@ -2,15 +2,15 @@
   "name": "epub-reader",
   "displayName": "Epub Reader",
   "description": "Support reading epub files.",
-  "publisher": "cweijan",
-  "version": "1.0.0",
+  "publisher": "pipeyume",
+  "version": "1.0.1",
   "icon": "epub-icon.png",
   "repository": {
-    "url": "https://github.com/weijan-vscode/vscode-epub-viewer.git",
+    "url": "https://github.com/PipeYume/vscode-epub-viewer.git",
     "type": "git"
   },
   "engines": {
-    "vscode": "^1.56.0"
+    "vscode": "^1.91.0"
   },
   "keywords": [
     "epub",
