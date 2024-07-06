@@ -573,10 +573,15 @@ App.prototype.onRenditionRelocatedUpdateIndicators = function (event) {
         if (this.getChipActive("progress") == "none") {
             stxt = "";
         } else if (this.getChipActive("progress") == "location" && event.start.location > 0) {
+            //TODO 换为真实页码
             stxt = `Loc ${event.start.location}/${this.state.book.locations.length()}`
         } else if (this.getChipActive("progress") == "chapter") {
-            let navItem = this.getNavItem(event, false) || this.getNavItem(event, true);
-            stxt = navItem ? navItem.label.trim() : (event.start.percentage > 0 && event.start.percentage < 1) ? `${Math.round(event.start.percentage * 100)}%` : "";
+            console.log(Object.keys(this.state.book.navigation.toc).length * event.start.percentage);
+            console.log(this.state.book.spine)
+            console.log(event);
+            console.log(this.state.book.navigation)
+            let navItem = this.state.book.navigation.get(this.state.book.spine.get(event.start.href).idref);
+            stxt = `${navItem ? navItem.label+"  ":""}${event.start.displayed.page}/${event.start.displayed.total}`
         } else {
             stxt = (event.start.percentage > 0 && event.start.percentage < 1) ? `${Math.round(event.start.percentage * 1000) / 10}%` : "";
         }
