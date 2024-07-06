@@ -55,7 +55,7 @@ let App = function (el) {
         }));
     });
 
-    window.onmousewheel = document.onmousewheel = e => {
+    window.onmousewheel = this.qs(".book").onmousewheel = e => {
         if (e.deltaY > 0) {
             this.state.rendition.next()
         } else {
@@ -311,7 +311,7 @@ App.prototype.onNavigationLoaded = function (nav) {
             a.href = item.href;
             a.dataset.href = item.href;
             a.innerHTML = `${"&nbsp;".repeat(indent * 4)}${item.label.trim()}`;
-            a.addEventListener("click", this.onTocItemClick.bind(this, item.href));
+            a.addEventListener("click", this.onTocItemClick.bind(this, `epubcfi(${this.state.book.spine.get("Text/"+item.href).cfiBase+"!/0"})`));
             handleItems(item.subitems, indent + 1);
         });
     };
