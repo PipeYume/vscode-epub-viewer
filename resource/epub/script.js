@@ -311,7 +311,12 @@ App.prototype.onNavigationLoaded = function (nav) {
             a.href = item.href;
             a.dataset.href = item.href;
             a.innerHTML = `${"&nbsp;".repeat(indent * 4)}${item.label.trim()}`;
-            a.addEventListener("click", this.onTocItemClick.bind(this, `epubcfi(${this.state.book.spine.get("Text/"+item.href).cfiBase+"!/0"})`));
+            const spineItem = this.state.book.spine.get("Text/" + item.href);
+            if (spineItem && spineItem.cfiBase) {
+                a.addEventListener("click", this.onTocItemClick.bind(this, `epubcfi(${spineItem.cfiBase + "!/0"})`));
+            } else {
+                a.addEventListener("click", this.onTocItemClick.bind(this, item.href));
+            }
             handleItems(item.subitems, indent + 1);
         });
     };
